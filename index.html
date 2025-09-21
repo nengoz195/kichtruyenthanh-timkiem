@@ -110,33 +110,26 @@
       const resultDiv = document.getElementById('result');
       resultDiv.innerHTML = "Đang tìm...";
 
-      try {
-        // 🔥 Fetch JSON từ Google Drive
-        const fileId = "1pEodC28MG_enG22U4LE-Lh4IE7yhDg23";
-        const url = `https://drive.google.com/uc?export=download&id=${fileId}`;
-        const response = await fetch(url);
-        const data = await response.json();
+      const response = await fetch('data.json');
+      const data = await response.json();
 
-        const found = data.filter(item =>
-          removeVietnameseTones(item.name.toLowerCase()).includes(query)
-        );
+      const found = data.filter(item => 
+        removeVietnameseTones(item.name.toLowerCase()).includes(query)
+      );
 
-        if (found.length > 0) {
-          let html = `<p>Tìm thấy ${found.length} kết quả:</p>`;
-          found.forEach(item => {
-            html += `
-              <div class="item">
-                <h4>${item.title}</h4>
-                <p><a href="${item.link}" target="_blank">${item.link}</a></p>
-              </div>
-            `;
-          });
-          resultDiv.innerHTML = html;
-        } else {
-          resultDiv.innerHTML = "Không tìm thấy kết quả nào";
-        }
-      } catch (error) {
-        resultDiv.innerHTML = `<p style="color:red">Lỗi tải dữ liệu: ${error}</p>`;
+      if (found.length > 0) {
+        let html = `<p>Tìm thấy ${found.length} kết quả:</p>`;
+        found.forEach(item => {
+          html += `
+            <div class="item">
+              <h4>${item.title}</h4>
+              <p><a href="${item.link}" target="_blank">${item.link}</a></p>
+            </div>
+          `;
+        });
+        resultDiv.innerHTML = html;
+      } else {
+        resultDiv.innerHTML = "Không tìm thấy kết quả nào";
       }
     }
 
@@ -149,4 +142,3 @@
   </script>
 </body>
 </html>
-
