@@ -96,15 +96,26 @@
   </div>
 
   <script>
+    // Hàm bỏ dấu tiếng Việt
+    function removeVietnameseTones(str) {
+      return str.normalize("NFD")
+                .replace(/[\u0300-\u036f]/g, "")
+                .replace(/đ/g, "d").replace(/Đ/g, "D");
+    }
+
     async function searchDrama() {
-      const query = document.getElementById('searchInput').value.trim().toLowerCase();
+      const query = removeVietnameseTones(
+        document.getElementById('searchInput').value.trim().toLowerCase()
+      );
       const resultDiv = document.getElementById('result');
       resultDiv.innerHTML = "Đang tìm...";
 
       const response = await fetch('data.json');
       const data = await response.json();
 
-      const found = data.filter(item => item.name.toLowerCase().includes(query));
+      const found = data.filter(item => 
+        removeVietnameseTones(item.name.toLowerCase()).includes(query)
+      );
 
       if (found.length > 0) {
         let html = `<p>Tìm thấy ${found.length} kết quả:</p>`;
@@ -121,6 +132,13 @@
         resultDiv.innerHTML = "Không tìm thấy kết quả nào";
       }
     }
+
+    // Cho phép nhấn Enter để tìm
+    document.getElementById("searchInput").addEventListener("keypress", function(e) {
+      if (e.key === "Enter") {
+        searchDrama();
+      }
+    });
   </script>
 </body>
 </html>
