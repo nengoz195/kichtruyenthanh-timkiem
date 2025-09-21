@@ -1,0 +1,117 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Tìm kiếm kịch truyền thanh</title>
+  <style>
+    body {
+      font-family: 'Segoe UI', sans-serif;
+      background: linear-gradient(135deg, #d4fc79, #96e6a1);
+      margin: 0;
+      padding: 0;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      min-height: 100vh;
+    }
+    .container {
+      background: white;
+      border-radius: 15px;
+      padding: 30px;
+      width: 600px;
+      max-width: 95%;
+      box-shadow: 0 5px 25px rgba(0,0,0,0.15);
+      text-align: center;
+    }
+    .avatar {
+      width: 80px;
+      height: 80px;
+      border-radius: 50%;
+      margin-bottom: 10px;
+    }
+    h3 {
+      margin: 5px 0 20px;
+      color: #666;
+      font-size: 16px;
+    }
+    h2 {
+      margin: 0 0 20px;
+      font-size: 22px;
+      color: #333;
+    }
+    input {
+      width: 65%;
+      padding: 10px;
+      border: 1px solid #ccc;
+      border-radius: 8px;
+      font-size: 15px;
+      margin-right: 5px;
+    }
+    button {
+      padding: 10px 20px;
+      border: none;
+      border-radius: 8px;
+      background: linear-gradient(90deg, #ff758c, #ff7eb3);
+      color: white;
+      font-size: 15px;
+      cursor: pointer;
+    }
+    button:hover {
+      opacity: 0.9;
+    }
+    .result {
+      margin-top: 25px;
+      text-align: left;
+      font-size: 15px;
+      color: #333;
+    }
+    a {
+      color: #0073ff;
+      text-decoration: none;
+      word-break: break-all;
+    }
+    a:hover {
+      text-decoration: underline;
+    }
+  </style>
+</head>
+<body>
+  <div class="container">
+    <!-- Avatar -->
+    <img src="https://i.ibb.co/p2Jk9jW/avatar.png" alt="avatar" class="avatar">
+    <h3>[+v yayadoo1314]</h3>
+    <h2>Tìm kiếm kịch truyền thanh</h2>
+    <p>Chỉ cần nhập tên kịch để tìm</p>
+
+    <!-- Ô tìm kiếm -->
+    <input type="text" id="searchInput" placeholder="Nhập tên kịch...">
+    <button onclick="searchDrama()">Tìm</button>
+
+    <!-- Kết quả -->
+    <div class="result" id="result"></div>
+  </div>
+
+  <script>
+    async function searchDrama() {
+      const query = document.getElementById('searchInput').value.trim();
+      const resultDiv = document.getElementById('result');
+      resultDiv.innerHTML = "Đang tìm...";
+
+      const response = await fetch('data.json');
+      const data = await response.json();
+
+      const found = data.find(item => item.name.includes(query));
+      if (found) {
+        resultDiv.innerHTML = `
+          <p>Tìm thấy 1 kết quả</p>
+          <h4>${found.title}</h4>
+          <p><a href="${found.link}" target="_blank">${found.link}</a></p>
+        `;
+      } else {
+        resultDiv.innerHTML = "Không tìm thấy kết quả nào";
+      }
+    }
+  </script>
+</body>
+</html>
