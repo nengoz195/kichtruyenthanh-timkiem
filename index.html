@@ -14,6 +14,7 @@
       justify-content: center;
       align-items: center;
       min-height: 100vh;
+      overflow-x: hidden;
     }
     .container {
       background: #fff;
@@ -23,10 +24,8 @@
       max-width: 100%;
       box-shadow: 0 8px 25px rgba(0,0,0,0.1);
       text-align: center;
-      transition: transform 0.3s ease;
-    }
-    .container:hover {
-      transform: translateY(-3px);
+      position: relative;
+      z-index: 2;
     }
     .avatar {
       width: 90px;
@@ -113,6 +112,22 @@
     a:hover {
       text-decoration: underline;
     }
+
+    /* Hoa rơi */
+    .flower {
+      position: fixed;
+      top: -50px;
+      font-size: 20px;
+      pointer-events: none;
+      animation: fall linear forwards;
+      z-index: 1;
+    }
+    @keyframes fall {
+      to {
+        transform: translateY(110vh) rotate(360deg);
+        opacity: 0;
+      }
+    }
   </style>
 </head>
 <body>
@@ -148,9 +163,11 @@
       const resultDiv = document.getElementById('result');
       if (!query) {
         resultDiv.innerHTML = "<p>Vui lòng nhập tên kịch để tìm 💡</p>";
+        createFlowers();
         return;
       }
       resultDiv.innerHTML = "🔍 Đang tìm...";
+      createFlowers();
 
       const response = await fetch('data.json');
       const data = await response.json();
@@ -181,6 +198,20 @@
         searchDrama();
       }
     });
+
+    // Hiệu ứng hoa rơi
+    function createFlowers() {
+      for (let i = 0; i < 8; i++) {
+        const flower = document.createElement("div");
+        flower.className = "flower";
+        flower.textContent = ["🌸","💮","🌺","🌼"][Math.floor(Math.random()*4)];
+        flower.style.left = Math.random() * 100 + "vw";
+        flower.style.animationDuration = (3 + Math.random() * 2) + "s";
+        document.body.appendChild(flower);
+
+        setTimeout(() => flower.remove(), 5000);
+      }
+    }
   </script>
 </body>
 </html>
