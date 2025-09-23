@@ -117,14 +117,15 @@
     .flower {
       position: fixed;
       top: -50px;
-      font-size: 20px;
+      font-size: 22px;
       pointer-events: none;
       animation: fall linear forwards;
-      z-index: 1;
+      z-index: 0;
+      will-change: transform, opacity;
     }
     @keyframes fall {
       to {
-        transform: translateY(110vh) rotate(360deg);
+        transform: translateY(100vh) rotate(360deg);
         opacity: 0;
       }
     }
@@ -199,17 +200,18 @@
       }
     });
 
-    // Hiệu ứng hoa rơi
+    // Hiệu ứng hoa rơi (fix cho mobile)
     function createFlowers() {
       for (let i = 0; i < 8; i++) {
         const flower = document.createElement("div");
         flower.className = "flower";
         flower.textContent = ["🌸","💮","🌺","🌼"][Math.floor(Math.random()*4)];
-        flower.style.left = Math.random() * 100 + "vw";
-        flower.style.animationDuration = (3 + Math.random() * 2) + "s";
+        flower.style.left = Math.random() * 95 + "%"; // tránh tràn màn
+        flower.style.animationDuration = (4 + Math.random() * 2) + "s";
+        flower.style.fontSize = (18 + Math.random() * 10) + "px"; // random size
         document.body.appendChild(flower);
 
-        setTimeout(() => flower.remove(), 5000);
+        setTimeout(() => flower.remove(), 6000);
       }
     }
   </script>
