@@ -7,58 +7,80 @@
   <style>
     body {
       font-family: 'Segoe UI', sans-serif;
-      background: linear-gradient(135deg, #d4fc79, #96e6a1);
+      background: linear-gradient(135deg, #ffecd2, #fcb69f);
       margin: 0;
-      padding: 0;
+      padding: 20px;
       display: flex;
       justify-content: center;
       align-items: center;
       min-height: 100vh;
     }
     .container {
-      background: white;
-      border-radius: 15px;
-      padding: 30px;
+      background: #fff;
+      border-radius: 20px;
+      padding: 25px 20px;
       width: 600px;
-      max-width: 95%;
-      box-shadow: 0 5px 25px rgba(0,0,0,0.15);
+      max-width: 100%;
+      box-shadow: 0 8px 25px rgba(0,0,0,0.1);
       text-align: center;
+      transition: transform 0.3s ease;
+    }
+    .container:hover {
+      transform: translateY(-3px);
     }
     .avatar {
-      width: 80px;
-      height: 80px;
+      width: 90px;
+      height: 90px;
       border-radius: 50%;
-      margin-bottom: 10px;
+      margin-bottom: 12px;
+      border: 3px solid #ffafbd;
     }
     h3 {
-      margin: 5px 0 20px;
-      color: #666;
+      margin: 0;
       font-size: 16px;
+      color: #777;
     }
     h2 {
+      margin: 8px 0 15px;
+      font-size: 24px;
+      color: #444;
+    }
+    p {
       margin: 0 0 20px;
-      font-size: 22px;
-      color: #333;
+      font-size: 15px;
+      color: #666;
+    }
+    .search-box {
+      display: flex;
+      flex-wrap: wrap;
+      justify-content: center;
+      gap: 10px;
     }
     input {
-      width: 65%;
-      padding: 10px;
-      border: 1px solid #ccc;
-      border-radius: 8px;
+      flex: 1 1 250px;
+      padding: 12px 15px;
+      border: 2px solid #ffc3a0;
+      border-radius: 12px;
       font-size: 15px;
-      margin-right: 5px;
+      outline: none;
+      transition: border-color 0.3s ease;
+    }
+    input:focus {
+      border-color: #ff758c;
     }
     button {
-      padding: 10px 20px;
+      padding: 12px 22px;
       border: none;
-      border-radius: 8px;
-      background: linear-gradient(90deg, #ff758c, #ff7eb3);
-      color: white;
+      border-radius: 12px;
+      background: linear-gradient(90deg, #ff9a9e, #fad0c4);
+      color: #fff;
       font-size: 15px;
       cursor: pointer;
+      transition: transform 0.2s ease, opacity 0.2s ease;
     }
     button:hover {
       opacity: 0.9;
+      transform: scale(1.05);
     }
     .result {
       margin-top: 25px;
@@ -67,12 +89,26 @@
       color: #333;
     }
     .item {
-      margin-bottom: 15px;
+      background: #fff7f8;
+      border: 1px solid #ffe0e6;
+      border-radius: 12px;
+      padding: 12px 15px;
+      margin-bottom: 12px;
+      transition: background 0.3s ease;
+    }
+    .item:hover {
+      background: #fff0f3;
+    }
+    .item h4 {
+      margin: 0 0 5px;
+      font-size: 16px;
+      color: #444;
     }
     a {
-      color: #0073ff;
+      color: #ff5e78;
       text-decoration: none;
       word-break: break-all;
+      font-size: 14px;
     }
     a:hover {
       text-decoration: underline;
@@ -84,12 +120,14 @@
     <!-- Avatar -->
     <img src="https://lh3.googleusercontent.com/pw/AP1GczPUW2Qz6FxhzACVAJi6dn3ERQQ7rIi79RthPvoFiX8L81D9pP7dC_wSfcSunLWjGiZKDtU5ajBe4VOKeVSJLQon1QS92bCRI9hqqjuyQLCH2KwfbuzZOJMrScOiNDwakZZd387Lkdks2SjUmBKPXfcU=w947-h947-s-no-gm?authuser=1" alt="avatar" class="avatar">
     <h3>Thiên Trường Địa Cửu</h3>
-    <h2>Tìm kiếm kịch truyền thanh</h2>
-    <p>Chỉ cần nhập tên kịch để tìm</p>
+    <h2>🌸 Tìm kiếm kịch truyền thanh 🌸</h2>
+    <p>Nhập tên kịch bạn muốn tìm</p>
 
     <!-- Ô tìm kiếm -->
-    <input type="text" id="searchInput" placeholder="Nhập tên kịch...">
-    <button onclick="searchDrama()">Tìm</button>
+    <div class="search-box">
+      <input type="text" id="searchInput" placeholder="Nhập tên kịch...">
+      <button onclick="searchDrama()">Tìm</button>
+    </div>
 
     <!-- Kết quả -->
     <div class="result" id="result"></div>
@@ -108,7 +146,11 @@
         document.getElementById('searchInput').value.trim().toLowerCase()
       );
       const resultDiv = document.getElementById('result');
-      resultDiv.innerHTML = "Đang tìm...";
+      if (!query) {
+        resultDiv.innerHTML = "<p>Vui lòng nhập tên kịch để tìm 💡</p>";
+        return;
+      }
+      resultDiv.innerHTML = "🔍 Đang tìm...";
 
       const response = await fetch('data.json');
       const data = await response.json();
@@ -118,7 +160,7 @@
       );
 
       if (found.length > 0) {
-        let html = `<p>Tìm thấy ${found.length} kết quả:</p>`;
+        let html = `<p>✨ Tìm thấy ${found.length} kết quả:</p>`;
         found.forEach(item => {
           html += `
             <div class="item">
@@ -129,7 +171,7 @@
         });
         resultDiv.innerHTML = html;
       } else {
-        resultDiv.innerHTML = "Không tìm thấy kết quả nào";
+        resultDiv.innerHTML = "😢 Không tìm thấy kết quả nào";
       }
     }
 
